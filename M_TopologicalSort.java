@@ -14,8 +14,7 @@ public class Solution {
      public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
         // write your code here
         ArrayList<DirectedGraphNode> result = new ArrayList<DirectedGraphNode>();
-        
-        //count number of edges by ending vertices 
+        //initialize map which contains node and number of edges pointing to it
         HashMap<DirectedGraphNode, Integer> map = new HashMap();
         for (DirectedGraphNode node : graph) {
             for (DirectedGraphNode neighbor : node.neighbors) {
@@ -26,8 +25,7 @@ public class Solution {
                 }
             }
         }
-        
-        //find starting point (no edge pointing to it), add to queue and result
+        //get starting nodes (no other node pointing to it)
         Queue<DirectedGraphNode> q = new LinkedList<DirectedGraphNode>();
         for (DirectedGraphNode node : graph) {
             if (!map.containsKey(node)) {
@@ -35,8 +33,7 @@ public class Solution {
                 result.add(node);
             }
         }
-        
-        //from starting point, get all its neighbors, reduce count of edges, and add to result if no other node is pointing to it, add to queue 
+        //add nodes from starting point
         while (!q.isEmpty()) {
             DirectedGraphNode node = q.poll();
             for (DirectedGraphNode n : node.neighbors) {
