@@ -50,35 +50,47 @@ public class Solution {
     }
     
     private void deleteNode(TreeNode parent, TreeNode node) {
-        if (node.right == null) {
-            if (parent.left == node) {
-                parent.left = node.left;
+        if(node.left == null && node.right == null) {   //case 1: no child, delete it directly
+            if(parent.left == node) {
+                parent.left = null;
             } else {
-                parent.right = node.left;
+                parent.right = null;
             }
-        } else {
-            TreeNode temp = node.right;
-            TreeNode father = node;
-            
-            while (temp.left != null) {
-                father = temp;
-                temp = temp.left;
-            }
-            
-            if (father.left == temp) {
-                father.left = temp.right;
+        } else if(node.left == null || node.right == null) {  //case 2: 1 child, make parent point to its child
+            if(node.left == null) {
+                if(parent.left == node) {
+                    parent.left = node.right;
+                } else {
+                    parent.right = node.right;
+                }
             } else {
-                father.right = temp.right;
+                if(parent.left == node) {
+                    parent.left = node.left;
+                } else {
+                    parent.right = node.left;
+                }                
             }
-            
-            if (parent.left == node) {
-                parent.left = temp;
+        } else {    //case 3: 2 children
+            //step 1: find minimum in right subtree, and its parent
+            TreeNode min = node.right;
+            TreeNode minParent = node;
+            while(min.left != null) {
+                min = min.left;
+            }
+            if(minParent.right == min) {
+                
             } else {
-                parent.right = temp;
+                minParent = minParent.right;
+                while(minParent.left != min) {
+                    minParent = minParent.left;
+                }
             }
             
-            temp.left = node.left;
-            temp.right = node.right;
+            //step 2: replace node's value with min in right subtree
+            node.val = min.val;
+            
+            //step 3: delete min
+            deleteNode(minParent, min);
         }
     }
 }
